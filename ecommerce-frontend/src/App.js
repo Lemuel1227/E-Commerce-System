@@ -6,9 +6,17 @@ import ProductManagement from './components/admin/ProductManagement';
 import TransactionMonitoring from './components/admin/TransactionMonitoring';
 import AdminRoute from './context/AdminRoute';
 
+import CustomerLayout from './components/customer/CustomerLayout';
+import CustomerRoute from './context/CustomerRoute';
+import CatalogPage from './components/customer/CatalogPage';
+import CartPage from './components/customer/CartPage';
+import CheckoutPage from './components/customer/CheckoutPage';
+import OrderHistoryPage from './components/customer/OrderHistoryPage';
+
 import NotFound from './components/NotFound'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   return (
@@ -24,6 +32,17 @@ function App() {
               <Route path="transactions" element={<TransactionMonitoring />} />
             </Route>
           </Route>
+
+          <Route element={<CustomerRoute />}>              
+            <Route path="/store" element={<CustomerLayout />}>                               
+            <Route index element={<Navigate to="catalog" replace />} />
+              <Route path="catalog" element={<CatalogPage />} />
+              <Route path="cart" element={<CartPage />} />
+              <Route path="checkout" element={<CheckoutPage />} />
+              <Route path="orders" element={<OrderHistoryPage />} />
+            </Route>
+          </Route>
+
 
           <Route path="*" element={<NotFound />} />  
         </Routes>
