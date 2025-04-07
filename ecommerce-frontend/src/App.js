@@ -1,5 +1,11 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
+import { AuthProvider, useAuth } from './context/AuthContext';
+
+import LoginPage from './components/authentication/LoginPage';
+import RegisterPage from './components/authentication/RegisterPage';
 
 import AdminLayout from './components/admin/AdminLayout';
 import ProductManagement from './components/admin/ProductManagement';
@@ -17,9 +23,17 @@ import NotFound from './components/NotFound'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+const AuthRedirector = () => {
+  const { user, authToken } = useAuth();
+  if (authToken && user) {
+    return user.role === 'admin' ? <Navigate to="/admin" replace /> : <Navigate to="/store" replace />;
+  }
+  return <Navigate to="/login" replace />;
+};
 
 function App() {
   return (
+    <AuthProvider>
       <Router>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
@@ -43,10 +57,12 @@ function App() {
             </Route>
           </Route>
 
+          <Route path="/" element={<AuthRedirector />} />
 
           <Route path="*" element={<NotFound />} />  
         </Routes>
       </Router>
+    </AuthProvider>
   );
 }
 
